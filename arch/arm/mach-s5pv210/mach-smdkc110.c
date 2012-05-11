@@ -35,6 +35,7 @@
 #include <linux/irq.h>
 #include <linux/skbuff.h>
 #include <linux/console.h>
+#include <linux/gpio_keys.h>//jhk
 
 #include <asm/mach/arch.h>
 #include <asm/mach/map.h>
