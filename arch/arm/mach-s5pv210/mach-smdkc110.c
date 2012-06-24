@@ -491,6 +491,66 @@ static struct max8698_platform_data max8698_pdata = {
 };
 #endif
 
+
+/******************************************************************************
+ * keypad
+ ******************************************************************************/
+#ifdef CONFIG_KEYBOARD_S3C_GPIO
+static struct gpio_keys_button gpio_buttons[] = {
+	{
+		.gpio		= S5PV210_GPH0(0),
+		.code		= 231,
+		.desc		= "CALL",
+		.active_low	= 1,
+		.wakeup		= 1,
+	},	
+	{
+		.gpio		= S5PV210_GPH0(1),
+		.code		= 139,
+		.desc		= "MENU",
+		.active_low	= 1,
+		.wakeup		= 1,
+	},
+	{
+		.gpio		= S5PV210_GPH0(3),
+		.code		= 158,
+		.desc		= "BACK",
+		.active_low	= 1,
+		.wakeup		= 1,
+	},
+	{
+		.gpio		= S5PV210_GPH0(4),
+		.code		= 107,
+		.desc		= "ENDCALL",
+		.active_low	= 1,
+		.wakeup		= 1,
+	},		
+	{
+		.gpio		= S5PV210_GPH0(5),
+		.code		= 102,
+		.desc		= "HOME",	
+		.active_low	= 1,
+		.wakeup		= 1,
+	},
+};
+
+static struct gpio_keys_platform_data gpio_button_data = {
+	.buttons	= gpio_buttons,
+	.nbuttons	= ARRAY_SIZE(gpio_buttons),
+};
+
+static struct platform_device s3c_device_gpio_button = {
+	.name		= "gpio-keys",
+	.id		= -1,
+	.num_resources	= 0,
+	.dev		= {
+		.platform_data	= &gpio_button_data,
+	}
+};
+#endif
+/*********************************************************************************************************/
+
+
 static void __init smdkc110_setup_clocks(void)
 {
 	struct clk *pclk;
@@ -741,7 +801,7 @@ static int lte480wv_backlight_on(struct platform_device *pdev)
 {
 	int err;
 
-	err = gpio_request(S5PV210_GPD0(3), "GPD0");
+	err = gpio_request(S5PV210_GPD0(0), "GPD0");
 
 	if (err) {
 		printk(KERN_ERR "failed to request GPD0 for "
@@ -749,11 +809,11 @@ static int lte480wv_backlight_on(struct platform_device *pdev)
 		return err;
 	}
 
-	gpio_direction_output(S5PV210_GPD0(3), 1);
+	gpio_direction_output(S5PV210_GPD0(0), 1);
 
-	s3c_gpio_cfgpin(S5PV210_GPD0(3), S5PV210_GPD_0_3_TOUT_3);
+	s3c_gpio_cfgpin(S5PV210_GPD0(0), S5PV210_GPD_0_0_TOUT_0);
 
-	gpio_free(S5PV210_GPD0(3));
+	gpio_free(S5PV210_GPD0(0));
 	return 0;
 }
 
@@ -761,7 +821,7 @@ static int lte480wv_backlight_off(struct platform_device *pdev, int onoff)
 {
 	int err;
 
-	err = gpio_request(S5PV210_GPD0(3), "GPD0");
+	err = gpio_request(S5PV210_GPD0(0), "GPD0");
 
 	if (err) {
 		printk(KERN_ERR "failed to request GPD0 for "
@@ -769,8 +829,8 @@ static int lte480wv_backlight_off(struct platform_device *pdev, int onoff)
 		return err;
 	}
 
-	gpio_direction_output(S5PV210_GPD0(3), 0);
-	gpio_free(S5PV210_GPD0(3));
+	gpio_direction_output(S5PV210_GPD0(0), 0);
+	gpio_free(S5PV210_GPD0(0));
 	return 0;
 }
 
@@ -887,7 +947,7 @@ struct s3c_pwm_data pwm_data[] = {
 
 #if defined(CONFIG_BACKLIGHT_PWM)
 static struct platform_pwm_backlight_data smdk_backlight_data = {
-	.pwm_id  = 3,
+	.pwm_id  = 0,
 	.max_brightness = 255,
 	.dft_brightness = 255,
 	.pwm_period_ns  = 25000,
@@ -897,7 +957,7 @@ static struct platform_device smdk_backlight_device = {
 	.name      = "pwm-backlight",
 	.id        = -1,
 	.dev        = {
-		.parent = &s3c_device_timer[3].dev,
+		.parent = &s3c_device_timer[0].dev,
 		.platform_data = &smdk_backlight_data,
 	},
 };
@@ -1418,6 +1478,9 @@ static struct platform_device *smdkc110_devices[] __initdata = {
 	&s3c_device_timer[2],
 	&s3c_device_timer[3],
 #endif
+#ifdef CONFIG_KEYBOARD_S3C_GPIO
+	&s3c_device_gpio_button,
+#endif
 };
 
 static void __init smdkc110_map_io(void)
@@ -1434,6 +1497,7 @@ static void __init smdkc110_map_io(void)
 	s3c_device_nand.name = "s5pv210-nand";
 #endif
 	s5p_device_rtc.name = "smdkc110-rtc";
+
 }
 
 unsigned int pm_debug_scratchpad;
