@@ -393,13 +393,13 @@ static int s3c_udc_power(struct s3c_udc *dev, char en)
 {
 	pr_debug("%s : %s\n", __func__, en ? "ON" : "OFF");
 
-	if (en) {
-		regulator_enable(dev->udc_vcc_d);
-		regulator_enable(dev->udc_vcc_a);
-	} else {
-		regulator_disable(dev->udc_vcc_d);
-		regulator_disable(dev->udc_vcc_a);
-	}
+//	if (en) {
+//		regulator_enable(dev->udc_vcc_d);
+//		regulator_enable(dev->udc_vcc_a);
+//	} else {
+//		regulator_disable(dev->udc_vcc_d);
+//		regulator_disable(dev->udc_vcc_a);
+//	}
 
 	return 0;
 }
@@ -1200,12 +1200,12 @@ static int s3c_udc_probe(struct platform_device *pdev)
 	dev->gadget.a_hnp_support = 0;
 	dev->gadget.a_alt_hnp_support = 0;
 
-	dev->udc_vcc_d = regulator_get(&pdev->dev, "pd_io");
-	dev->udc_vcc_a = regulator_get(&pdev->dev, "pd_core");
-	if (IS_ERR(dev->udc_vcc_d) || IS_ERR(dev->udc_vcc_a)) {
-		printk(KERN_ERR "failed to find udc vcc source\n");
-		return -ENOENT;
-	}
+//	dev->udc_vcc_d = regulator_get(&pdev->dev, "pd_io");
+//	dev->udc_vcc_a = regulator_get(&pdev->dev, "pd_core");
+//	if (IS_ERR(dev->udc_vcc_d) || IS_ERR(dev->udc_vcc_a)) {
+//		printk(KERN_ERR "failed to find udc vcc source\n");
+//		return -ENOENT;
+//	}
 
 	the_controller = dev;
 	platform_set_drvdata(pdev, dev);

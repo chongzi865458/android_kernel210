@@ -1018,7 +1018,7 @@ static int if_sdio_probe(struct sdio_func *func,
 		if (ret)
 			goto release_int;
 
-		reg |= SDIO_BUS_ECSI;
+//		reg |= SDIO_BUS_ECSI; //jhk
 		sdio_f0_writeb(func, reg, SDIO_CCCR_IF, &ret);
 		if (ret)
 			goto release_int;
