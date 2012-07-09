@@ -200,8 +200,8 @@ static struct resource s5p_dm9000_resources[] = {
 	},
 	[1] = {
 #if defined(CONFIG_DM9000_16BIT)
-		.start = S5P_PA_DM9000 + 2,
-		.end   = S5P_PA_DM9000 + 2,
+		.start = S5P_PA_DM9000 + 4,
+		.end   = S5P_PA_DM9000 + 4,
 		.flags = IORESOURCE_MEM,
 #else
 		.start = S5P_PA_DM9000 + 1,
