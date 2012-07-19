@@ -717,18 +717,21 @@ static void __init smdkc110_dm9000_set(void)
 {
 	unsigned int tmp;
 
-	tmp = ((0<<28)|(0<<24)|(5<<16)|(0<<12)|(0<<8)|(0<<4)|(0<<0));
-	__raw_writel(tmp, (S5P_SROM_BW+0x18));
-
+	tmp = ((0<<28)|(3<<24)|(7<<16)|(1<<12)|(3<<8)|(6<<4)|(0<<0));
+	__raw_writel(tmp, (S5P_SROM_BW+0x08));//Bc1
+	
 	tmp = __raw_readl(S5P_SROM_BW);
-	tmp &= ~(0xf << 20);
+	tmp &= ~(0xf << 4);
+	
 
-	tmp |= (0x1 << 20); /* dm9000 16bit */
+	tmp |= (0x1 << 4);
+	tmp |= (0x2 << 4);
+
 	__raw_writel(tmp, S5P_SROM_BW);
 
 	tmp = __raw_readl(S5PV210_MP01CON);
-	tmp &= ~(0xf << 20);
-	tmp |= (2 << 20);
+	tmp &= ~(0xf << 4);
+	tmp |= (2 << 4);
 
 	__raw_writel(tmp, S5PV210_MP01CON);
 }

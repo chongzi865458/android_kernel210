@@ -16,7 +16,8 @@
 #include <plat/map-base.h>
 #include <plat/map-s5p.h>
 
-#define S5PV210_PA_DM9000       (0xA8000000)
+
+#define S5PV210_PA_DM9000	(0x88000300)
 #define S5P_PA_DM9000           S5PV210_PA_DM9000
 
 #define S5PC110_PA_ONENAND	(0xB0000000)
